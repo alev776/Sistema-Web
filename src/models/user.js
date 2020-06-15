@@ -55,6 +55,24 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
+userSchema.virtual('categorias', {
+    ref: 'Categorias',
+    localField: '_id',
+    foreignField: 'owner'
+});
+
+userSchema.virtual('ingresos', {
+    ref: 'Ingresos',
+    localField: '_id',
+    foreignField: 'owner'
+});
+
+userSchema.virtual('clientes', {
+    ref: 'Cliente',
+    localField: '_id',
+    foreignField: 'owner'
+})
+
 userSchema.methods.toJSON = function() {
 
     const userObject = this.toObject();

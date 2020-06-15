@@ -1,9 +1,12 @@
 const express = require('express');
 require('./db/mongoose');
 const path = require('path');
-const login = require('./routes/login');
-const morgan = require('morgan');
 const cors = require('cors');
+const login = require('./routes/login');
+const categorias = require('./routes/categorias');
+const articulos = require('./routes/articulos');
+const ingresos = require('./routes/ingresos');
+const Clientes = require('./routes/Clientes');
 
 const app = express();
 
@@ -11,8 +14,26 @@ const publicDirectory = path.join(__dirname, './public');
 
 app.use(express.json());
 app.use(cors({origin: 'http://localhost:8080'}));
-app.use(morgan('tiny'));
 app.use(express.static(publicDirectory));
 app.use(login);
+app.use(categorias);
+app.use(articulos);
+app.use(ingresos);
+app.use(Clientes);
+
+// const Categoria = require('./models/categorias');
+// const User = require('./models/user');
+
+// const main = async () => {
+//     // const categoria = await Categoria.findById('5ee3a15a9f810f3ad42deab4');
+//     // await categoria.populate('owner').execPopulate();
+//     // console.log(categoria.owner);
+
+//     const user = await User.findById('5ee3a0dc9f810f3ad42deab2');
+//     await user.populate('categorias').execPopulate();
+//     console.log(user.categorias);
+// }
+
+// main();
 
 module.exports = app;
