@@ -7,6 +7,9 @@ const categorias = require('./routes/categorias');
 const articulos = require('./routes/articulos');
 const ingresos = require('./routes/ingresos');
 const Clientes = require('./routes/Clientes');
+const Proveedores = require('./routes/Proveedores');
+const Ventas = require('./routes/Ventas');
+const Detalle_Ventas = require('./routes/Detalle_Ventas');
 
 const app = express();
 
@@ -20,6 +23,9 @@ app.use(categorias);
 app.use(articulos);
 app.use(ingresos);
 app.use(Clientes);
+app.use(Proveedores);
+app.use(Ventas);
+app.use(Detalle_Ventas);
 
 // const Categoria = require('./models/categorias');
 // const User = require('./models/user');

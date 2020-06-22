@@ -71,7 +71,18 @@ userSchema.virtual('clientes', {
     ref: 'Cliente',
     localField: '_id',
     foreignField: 'owner'
-})
+});
+
+userSchema.virtual('proveedores', {
+    ref: 'Proveedor',
+    localField: '_id',
+    foreignField: 'owner'
+});
+userSchema.virtual('ventas', {
+    ref: 'Venta',
+    localField: '_id',
+    foreignField: 'owner'
+});
 
 userSchema.methods.toJSON = function() {
 
