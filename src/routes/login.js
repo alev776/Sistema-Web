@@ -6,13 +6,20 @@ const { sendWelcomeEmail } = require('../emails/account');
 const auth = require('../middlewares/auth');
 
 router.post('/users', async(req, res) => {
-    const user = new User(req.body);
 
     try {
-        await user.save();
-        // sendWelcomeEmail(user.email, user.name);
-        const token = await user.generateAuthToken();
-        res.status(201).send({ user, token });
+        const exist = await User.findOne({email: req.body.email});
+        if (exist) {
+            const token = await exist.generateAuthToken();
+            return res.send({ user: exist, token })
+        } else {
+            const user = new User(req.body);
+
+            await user.save();
+            // sendWelcomeEmail(user.email, user.name);
+            const token = await user.generateAuthToken();
+            res.status(201).send({ user, token });
+        }
 
     } catch (error) {
         res.status(400).send(error);
