@@ -55,14 +55,14 @@ router.get('/proveedor/:id', auth, async(req ,res) => {
 
 });
 
-router.patch('/ingreso/:id', auth, async(req, res) => {
+router.patch('/proveedor/:id', auth, async(req, res) => {
     const _id = req.params.id;
 
     try {
         const proveedor = await Proveedor.findOneAndUpdate({
             _id,
             owner: req.user._id
-        }, req.body, { new: true, runValidators: true });
+        }, req.body, { new: true, runValidators: true, context: 'query' });
 
         if (!proveedor) {
             return res.status(404).send();

@@ -2,6 +2,7 @@ const express = require('express');
 const router = new express.Router();
 const auth = require('../middlewares/auth');
 const Articulos = require('../models/articulos');
+const Categorias = require('../models/categorias');
 
 router.post('/articulos', auth, async(req, res) => {
     const articulos = new Articulos({
@@ -20,6 +21,17 @@ router.post('/articulos', auth, async(req, res) => {
 router.get('/articulos', auth, async(req, res) => {
     try {
         const articulos = await Articulos.find({ owner: req.user._id });
+
+        articulos.forEach(x => {
+            const categoria = Categorias.find({ _id: x.categoria});
+            categoria.then(el => {
+                const nombreCategoria = {}
+                nombreCategoria.nombre = el.nombre;
+                nombreCategoria._id = el._id;
+                x.nombreCategoria = nombreCategoria
+            })
+            console.log(x);
+        });
 
         if (!articulos) {
             return res.status(404).send();
