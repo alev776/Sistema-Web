@@ -38,6 +38,32 @@ router.post('/user/login', async(req, res) => {
     }
 });
 
+router.patch('/user/me', auth, async(req, res) => {
+    const _id = req.user._id;
+    const updates = Object.keys(req.body);
+    const allowedUpdates = ['name', 'email', 'password', 'direccion', 'cuidad', 'nombre_empresa'];
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+
+    if (!isValidOperation) {
+        return res.status(400).send({ error: 'Invalid updates' })
+    }
+
+    try {
+        // const user = await User.findById(_id);
+
+        updates.forEach((x) => req.user[x] = req.body[x]);
+
+        await req.user.save();
+
+        //const user = await User.findByIdAndUpdate(_id, req.body, { new: true, runValidators: true });
+
+        res.send(req.user);
+    } catch (error) {
+        res.status(400).send();
+    }
+
+});
+
 router.post('/user/logout', auth, async(req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter(x => x.token !== req.token);
@@ -68,6 +94,10 @@ router.get('/user', auth, async(req, res) => {
         res.status(400).send(error);
     }
 });
+
+router.post('/', (req, res) => {
+
+})
 
 
 

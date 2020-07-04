@@ -58,7 +58,9 @@ router.patch('/cliente/:id', auth, async(req ,res) => {
     const _id = req.params.id;
 
     try {
-        const cliente = await Cliente.findOneAndUpdate({ _id, owner: req.user._id}, req.body, { new: true, runValidators: true});
+        const cliente = await Cliente.findOneAndUpdate({
+            _id, owner: req.user._id
+        },  req.body, { new: true, runValidators: true, context: 'query'});
 
         if (!cliente) {
             res.status(404).send();

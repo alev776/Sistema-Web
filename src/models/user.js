@@ -41,6 +41,18 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
+    direccion: {
+        type: String,
+        default: ''
+    },
+    cuidad: {
+        type: String,
+        default: ''
+    },
+    nombre_empresa: {
+         type: String,
+         default: ''
+    },
     tokens: [{
         token: {
             type: String,

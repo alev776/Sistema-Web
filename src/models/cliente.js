@@ -10,8 +10,7 @@ const clienteSchema = new mongoose.Schema({
     },
     tipo_persona: {
         type: String,
-        trim: true,
-        maxlength: 25
+        default: 'Cliente',
     },
     tipo_documento: {
         type: String,

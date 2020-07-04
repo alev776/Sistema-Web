@@ -30,7 +30,6 @@ router.get('/articulos', auth, async(req, res) => {
                 nombreCategoria._id = el._id;
                 x.nombreCategoria = nombreCategoria
             })
-            console.log(x);
         });
 
         if (!articulos) {
