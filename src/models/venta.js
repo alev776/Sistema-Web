@@ -55,11 +55,11 @@ const ventaSchema = new mongoose.Schema({
 
 ventaSchema.plugin(uniqueValidator, { message: 'Expected {PATH} to be unique' });
 
-ventaSchema.virtual('detalle', {
-    ref: 'Detalle_Venta',
-    localField: '_id',
-    foreignField: 'ventaId'
-});
+// ventaSchema.virtual('detalle', {
+//     ref: 'Detalle_Venta',
+//     localField: '_id',
+//     foreignField: 'ventaId'
+// });
 
 const Venta = mongoose.model('Venta', ventaSchema);
 

@@ -2,6 +2,7 @@ const Ingresos = require('../models/ingresos');
 const express = require('express');
 const router = new express.Router();
 const auth = require('../middlewares/auth');
+const Detalle_Ingresos = require('../models/detalle_ingreso');
 
 router.post('/ingresos', auth, async(req ,res) => {
     const ingreso = new Ingresos({
@@ -11,7 +12,11 @@ router.post('/ingresos', auth, async(req ,res) => {
 
     try {
         await ingreso.save();
-        res.status(201).send(ingreso);
+
+        const detalles = Detalle_Ingresos.toObject(req.body.detalles, ingreso._id, req.user._id);
+        const detalle = await Detalle_Ingresos.create(detalles);
+
+        res.status(201).send({ingreso, detalle});
     } catch (error) {
         res.status(400).send(error);
     }
@@ -27,7 +32,10 @@ router.get('/ingresos', auth, async(req ,res) => {
             }
         }).execPopulate();
 
-        res.send(req.user.ingresos);
+        const detalles = await Detalle_Ingresos.find({owner: req.user._id});
+        const ingresos = req.user.ingresos;
+
+        res.send({ ingresos, detalles });
     } catch (error) {
         res.status(404).send(error);
     }

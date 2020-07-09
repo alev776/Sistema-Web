@@ -37,14 +37,17 @@ router.get('/ventas', auth, async(req, res) => {
             const detalles = Detalle_Venta.find({ventaId: element._id});
             detalles.then(el => {
                 el.forEach(detalle => {
-                    if (element.detalles.length > 1) {
+                    if (detalle.length) {
                         element.detalles.forEach(el => {
                             const isAdded = el._id === detalle._id;
+                            console.log(isAdded);
                             if (isAdded) {
                                 element.detalles.push(detalle);
                             }
                         })
                     } else {
+                        const isAdded = el._id === detalle._id;
+                            console.log(isAdded);
                         element.detalles.push(detalle);
                     }
                 });
