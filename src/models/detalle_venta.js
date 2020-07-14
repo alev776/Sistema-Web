@@ -15,22 +15,27 @@ const detalle_ventaSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    descuento: {
-        type: Number,
-        required: true
-    },
     ventaId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Venta'
+        required: true
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
     }
-},{ toJSON: { virtuals: true } });
+});
 
-detalle_ventaSchema.statics.toObject = async(arr, _id) => {
+detalle_ventaSchema.statics.toObject = (arr, _id, owner) => {
     let rv = arr;
-    for (let i = 0; i < arr.length; ++i)
-        rv[i].ventaId = _id
-    return rv;
+    for (let i = 0; i < arr.length; ++i){
+        rv[i].ventaId = _id;
+        rv[i].owner = owner;
+        rv[i].idArticulo = arr[i]._id
+        delete rv[i]._id
+    }
+        return rv;
 }
+
 
 const Detalle_Venta = mongoose.model('Detalle_Venta', detalle_ventaSchema);
 

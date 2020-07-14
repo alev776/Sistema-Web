@@ -80,18 +80,39 @@ router.patch('/ingreso/:id', auth, async(req, res) => {
         await ingreso.save();
 
         const detallesToDelete = await Detalle_Ingresos.find({idIngreso: _id});
-        // detallesToDelete.forEach(x => {
-        //     const det = req.body.detalles.filter(y => x._id !== y._id);
-        //     console.log(det);
-        // })
-        const detalles = req.body.detalles.filter(async x => {
+        var filteredArray  = detallesToDelete.filter(function(array_el){
+            return req.body.detalles.filter(function(anotherOne_el){
+               return anotherOne_el._id == array_el._id;
+            }).length == 0
+         });
+
+         if (filteredArray.length) {
+             filteredArray.forEach(async x => {
+                 await Detalle_Ingresos.findByIdAndDelete(x._id);
+             });
+         }
+
+        var filteredAddArray  = req.body.detalles.filter(function(array_el){
+            return detallesToDelete.filter(function(anotherOne_el){
+               return anotherOne_el._id == array_el._id;
+            }).length == 0
+         });
+
+        if (filteredAddArray.length) {
+            const arreglo = Detalle_Ingresos.toObject(filteredAddArray, ingreso._id, req.user._id);
+            arreglo.forEach(async x => {
+                const detalleAdd = new Detalle_Ingresos(x)
+                await detalleAdd.save()
+            })
+        }
+
+        req.body.detalles.forEach(async x => {
             const allowedUpdates = _.pick(x, ['cantidad', 'precio']);
             const detalle = await Detalle_Ingresos.findOneAndUpdate({_id: x._id}, allowedUpdates, {new: true});
-
-            await detalle.save();
+            if (detalle) {
+                await detalle.save();
+            }
         });
-
-        await detalles.save();
 
         res.send(ingreso);
     } catch (error) {
@@ -108,6 +129,17 @@ router.delete('/ingreso/:id', auth, async(req, res) => {
             _id,
             owner: req.user._id
         });
+
+        if (ingreso) {
+            const detalleIngresos = await Detalle_Ingresos.find({idIngreso: ingreso._id});
+            if (detalleIngresos) {
+                detalleIngresos.forEach(async x => {
+                    await Detalle_Ingresos.findByIdAndDelete(x._id);
+                });
+            }
+        }
+
+
         if (!ingreso) {
             return res.status(400).send();
         }

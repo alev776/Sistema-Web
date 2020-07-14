@@ -3,10 +3,6 @@ const validator = require('validator');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const ventaSchema = new mongoose.Schema({
-    usuarioId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-    },
     clienteId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true
@@ -31,6 +27,10 @@ const ventaSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    descuento: {
+        type: Number,
+        default: 0
+    },
     total: {
         type: Number,
         required: true
@@ -44,14 +44,7 @@ const ventaSchema = new mongoose.Schema({
         required: true,
         ref: 'User'
     },
-    ventas: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Detalle_Venta'
-    },
-    detalles: {
-        type: Array
-    }
-},{ toJSON: { virtuals: true } });
+});
 
 ventaSchema.plugin(uniqueValidator, { message: 'Expected {PATH} to be unique' });
 
