@@ -30,6 +30,8 @@ detalle_Ingresos.statics.toObject = (arr, _id, owner) => {
     for (let i = 0; i < arr.length; ++i) {
         rv[i].idIngreso = _id;
         rv[i].owner = owner;
+        rv[i].idArticulo = arr[i]._id
+        delete rv[i]._id
     }
     return rv;
 }

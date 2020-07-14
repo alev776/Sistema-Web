@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-const date = new Date
-
 const ingresoSchema = new mongoose.Schema({
     proveedor: {
         type: mongoose.Schema.Types.ObjectId,
@@ -19,7 +17,7 @@ const ingresoSchema = new mongoose.Schema({
     },
     fecha: {
         type: Date,
-        default: date.toISOString().substr(0, 10)
+        default: new Date
     },
     impuesto: {
         type: Number,

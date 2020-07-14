@@ -3,6 +3,7 @@ const express = require('express');
 const router = new express.Router();
 const auth = require('../middlewares/auth');
 const Detalle_Ingresos = require('../models/detalle_ingreso');
+const _ = require('underscore');
 
 router.post('/ingresos', auth, async(req ,res) => {
     const ingreso = new Ingresos({
@@ -77,6 +78,20 @@ router.patch('/ingreso/:id', auth, async(req, res) => {
 
         updates.forEach(x => ingreso[x] = req.body[x]);
         await ingreso.save();
+
+        const detallesToDelete = await Detalle_Ingresos.find({idIngreso: _id});
+        // detallesToDelete.forEach(x => {
+        //     const det = req.body.detalles.filter(y => x._id !== y._id);
+        //     console.log(det);
+        // })
+        const detalles = req.body.detalles.filter(async x => {
+            const allowedUpdates = _.pick(x, ['cantidad', 'precio']);
+            const detalle = await Detalle_Ingresos.findOneAndUpdate({_id: x._id}, allowedUpdates, {new: true});
+
+            await detalle.save();
+        });
+
+        await detalles.save();
 
         res.send(ingreso);
     } catch (error) {
