@@ -44,6 +44,60 @@ router.get('/ventas', auth, async(req, res) => {
 
 });
 
+router.get('/ventasByDate/:startDate/:endDate', auth, async(req, res) => {
+    const startDate = req.params.startDate
+    const endDate = req.params.endDate;
+    try {
+        if (endDate === '') {
+            const ventas = await Venta.find({
+                'fecha': {'$gte': startDate}
+            });
+
+
+
+            const detalles = await Detalle_Venta.find({owner: req.user._id});
+            res.send({ventas, detalles});
+        }else {
+            const ventas = await Venta.find({
+                'fecha': {'$gte': startDate, '$lte': endDate}
+            });
+            const detalles = await Detalle_Venta.find({owner: req.user._id});
+            res.send({ventas, detalles});
+        }
+
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+
+router.get('/ventaTotalPorMes/:year', auth, async(req, res) => {
+    const year = req.params.year;
+    console.log(year);
+    try {
+        const fecha = await Venta.aggregate(
+            [
+                {
+                    $match: { owner: req.user._id, year: parseInt(year) }
+                },
+                {
+                    $group: {
+                        _id: { $month: { date: "$fecha" } },
+                        total: {
+                            $sum: '$doc'
+                        }
+                      }
+                },
+                { $sort : { fecha : -1} }
+            ]
+        );
+
+        res.send(fecha)
+
+    } catch (error) {
+        res.send(error);
+    }
+});
+
 router.get('/venta/:id', auth, async(req, res) => {
     const _id = req.params.id
 

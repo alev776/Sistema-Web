@@ -23,6 +23,10 @@ const ventaSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    year: {
+        type: Number,
+        required: true
+    },
     impuesto: {
         type: Number,
         required: true
@@ -34,6 +38,10 @@ const ventaSchema = new mongoose.Schema({
     total: {
         type: Number,
         required: true
+    },
+    doc: {
+      type: Number,
+      default: 1
     },
     estado: {
         type: String,

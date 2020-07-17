@@ -42,6 +42,30 @@ router.get('/ingresos', auth, async(req ,res) => {
     }
 });
 
+router.get('/ingresosByDate/:startDate/:endDate', auth, async(req, res) => {
+    const startDate = req.params.startDate
+    const endDate = req.params.endDate;
+    try {
+        if (endDate === '') {
+            const ingresos = await Ingresos.find({
+                'fecha': {'$gte': startDate}
+            });
+
+            const detalles = await Detalle_Ingresos.find({owner: req.user._id});
+            res.send({ingresos, detalles});
+        }else {
+            const ingresos = await Ingresos.find({
+                'fecha': {'$gte': startDate, '$lte': endDate}
+            });
+            const detalles = await Detalle_Ingresos.find({owner: req.user._id});
+            res.send({ingresos, detalles});
+        }
+
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+
 router.get('/ingreso/:id', auth, async(req, res) => {
     const _id = req.params.id;
 
