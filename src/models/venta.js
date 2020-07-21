@@ -28,8 +28,7 @@ const ventaSchema = new mongoose.Schema({
         required: true
     },
     impuesto: {
-        type: Number,
-        required: true
+        type: Number
     },
     descuento: {
         type: Number,
@@ -37,7 +36,7 @@ const ventaSchema = new mongoose.Schema({
     },
     total: {
         type: Number,
-        required: true
+        default: 0
     },
     doc: {
       type: Number,

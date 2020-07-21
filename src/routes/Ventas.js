@@ -72,7 +72,6 @@ router.get('/ventasByDate/:startDate/:endDate', auth, async(req, res) => {
 
 router.get('/ventaTotalPorMes/:year', auth, async(req, res) => {
     const year = req.params.year;
-    console.log(year);
     try {
         const fecha = await Venta.aggregate(
             [

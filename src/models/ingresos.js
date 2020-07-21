@@ -20,12 +20,11 @@ const ingresoSchema = new mongoose.Schema({
         default: new Date
     },
     impuesto: {
-        type: Number,
-        required: true
+        type: Number
     },
     total: {
         type: Number,
-        required: true
+        default: 0
     },
     estado: {
         type: String,
