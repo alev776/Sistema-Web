@@ -13,7 +13,7 @@ const Detalle_Ventas = require('./routes/Detalle_Ventas');
 
 const app = express();
 
-const publicDirectory = path.join(__dirname, './public');
+const publicDirectory = path.join(__dirname, '../public');
 
 app.use(express.json());
 app.use(cors({origin: 'http://localhost:8080'}));
