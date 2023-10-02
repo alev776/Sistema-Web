@@ -16,7 +16,7 @@ const app = express();
 const publicDirectory = path.join(__dirname, '../public');
 
 app.use(express.json());
-//app.use(cors({origin: 'http://localhost:8080'}));
+app.use(cors({origin: 'http://localhost:3080'}));
 app.use(cors({origin: 'https://sistema-web-rd-fbf35f5aec8a.herokuapp.com/'}));
 // app.use(cors({origin: 'https://web-ventas-app.herokuapp.com/'}));
 app.use(express.static(publicDirectory));
