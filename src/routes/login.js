@@ -98,7 +98,7 @@ router.get('/user', auth, async(req, res) => {
 });
 
 router.get('/image', (req, res) => {
-    const url = "http://localhost:8080/api/files/login.jpg";
+    const url = "/api/files/login.jpg";
     let er;
 
     request({ url, json: true }, (error, { body }) => {

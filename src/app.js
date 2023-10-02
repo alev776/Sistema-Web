@@ -10,12 +10,15 @@ const Clientes = require('./routes/Clientes');
 const Proveedores = require('./routes/Proveedores');
 const Ventas = require('./routes/Ventas');
 const Detalle_Ventas = require('./routes/Detalle_Ventas');
+const dotenv = require("dotenv");
 
+dotenv.config();
 const app = express();
 
 const publicDirectory = path.join(__dirname, '../public');
 
 app.use(express.json());
+app.use(cors())
 app.use(cors({origin: 'http://localhost:3080'}));
 app.use(cors({origin: 'https://sistema-web-rd-fbf35f5aec8a.herokuapp.com/'}));
 // app.use(cors({origin: 'https://web-ventas-app.herokuapp.com/'}));
