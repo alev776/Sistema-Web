@@ -4,17 +4,19 @@ const jwt = require('jsonwebtoken');
 const router = new express.Router();
 const { sendWelcomeEmail } = require('../emails/account');
 const auth = require('../middlewares/auth');
+const request = require('request');
 
 router.post('/users', async(req, res) => {
 
     try {
+        console.log(req.body)
         const exist = await User.findOne({email: req.body.email});
         if (exist) {
             const token = await exist.generateAuthToken();
             return res.send({ user: exist, token })
         } else {
             const user = new User(req.body);
-
+ 
             await user.save();
             // sendWelcomeEmail(user.email, user.name);
             const token = await user.generateAuthToken();
@@ -31,7 +33,7 @@ router.post('/user/login', async(req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password);
         const token = await user.generateAuthToken();
-
+        console.log(req.body)
         res.send({ user, token });
     } catch (error) {
         res.status(400).send();
@@ -95,8 +97,18 @@ router.get('/user', auth, async(req, res) => {
     }
 });
 
-router.post('/', (req, res) => {
+router.get('/image', (req, res) => {
+    const url = "http://localhost:8080/api/files/login.jpg";
+    let er;
 
+    request({ url, json: true }, (error, { body }) => {
+        try {
+            res.end(body)
+        } catch (er) {
+
+        }
+
+    });
 })
 
 
